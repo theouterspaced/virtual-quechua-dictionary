@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<link rel="icon" href="/favicon.ico" type="image/x-icon">
+<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+body {
+background-color: black;
+color: lightgray;
+font-family: monospace;
+font-size: large;
+text-align: center;
+}
+h1 {color: indianred;}
+header {padding: 5px 20px;}
+main {padding: 0px 20px;}
+a {
+color: goldenrod;
+font-family: monospace;
+text-decoration: none;
+}
+a:hover {color: skyblue;}
+#results {
+background: black;
+border: 0px;
+color: lightsteelblue;
+font-family: sans-serif;
+margin-top: 20px;
+padding: 40px;
+text-align: left;
+white-space: pre-wrap;
+}
+input[type="text"] {
+background-color: black;
+border-radius: 3px;
+border: 2px solid indianred;
+color: white;
+font-size: 0.9em;
+padding: 0.5em 1em;
+}
+button {
+background-color: lightsteelblue;
+border-radius: 7px;
+border: 2px solid lightsteelblue;
+color: black;
+cursor: pointer;
+font-size: medium;
+font-weight: bold;
+padding: 0.3em 0.8em;
+}
+button:hover {
+background-color: royalblue;
+border: 2px solid royalblue;
+color: white;
+font-size: medium;
+}
+</style>
+<title>Virtual Quechua Dictionary</title>
+</head>
+<body>
+<br />
+<img src="data/disk.png"></img>
+<h1>Virtual Quechua Dictionary</h1>
+<p style="color: gray;">
+[ southern quechua ~ hanan runasimi ]
+</p>
+<br /><br /><br />
+<main>
+<input class="search-box" type="text" id="searchTerm" placeholder="word to search for">
+<button class="button" id="searchBtn">search 🡆</button><br />
+<div id="results"></div>
+<button calss="muted-button" id="googleBtn">or try google translate 🡕</button>
+<br />
+<br />
+<br />
+<p>
+This website also hosts some <a href="https://kevinmarx.org/shared/quechua-books/"><strong>books</strong></a> and <a href="https://kevinmarx.org/quechua-notes.html"><strong>useful links</strong></a>.
+</p>
+</main>
+  <script>
+    let fileContent = "";
+    fetch('shared/qu/virt-qu-dic.txt')
+      .then(response => response.text())
+      .then(text => {
+        fileContent = text;
+      })
+      .catch(error => console.error('Error loading the file:', error));
+    document.getElementById('searchBtn').addEventListener('click', function () {
+      const term = document.getElementById('searchTerm').value.trim().toLowerCase();
+      const resultsDiv = document.getElementById('results');
+      resultsDiv.textContent = "";
+      if (term === "") {
+        resultsDiv.textContent = "please enter a word above to lookup ~";
+        return;
+      }
+      const lines = fileContent.split('\n');
+      const matches = lines.filter(line => {
+        const regex = new RegExp(`\\s${term}s?\\s|\\s${term}s?;|${term}s? \\s`);
+        return regex.test(line);
+      });
+      if (matches.length > 0) {
+        resultsDiv.textContent = matches.join("\n\n");
+      } else {
+        resultsDiv.textContent = "no matches found ~";
+      }
+    });
+    document.getElementById('googleBtn').addEventListener('click', function () {
+      const term = document.getElementById('searchTerm').value.trim();
+      if (term === "") {
+        alert("please enter a word to lookup ~");
+        return;
+      }
+      const encodedTerm = encodeURIComponent(term);
+      const url = `https://translate.google.com/?sl=en&tl=qu&text=${encodedTerm}`;
+      window.open(url, '_blank');
+    });
+    const searchTermInput = document.getElementById('searchTerm');
+    searchTermInput.addEventListener('keydown', function (event) {
+      if (event.key === 'Enter') {
+        document.getElementById('searchBtn').click();
+      }
+    });
+  </script>
+</body>
+<footer>
+<br /><p style="text-align: center;">
+( updated 2025 | <a href="https://kevinmarx.org">km.o</a> )
+</p><br />
+</footer>
+</html>
+
