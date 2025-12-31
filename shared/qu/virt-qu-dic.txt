@@ -1,3 +1,4 @@
+
 [ allinllachu ]    casual    [ hello; hi ]
 [ imaynalla ]    casual    [ hello; how are you? ]
 [ sulpayki ]    casual    [ thank you; thanks ]
